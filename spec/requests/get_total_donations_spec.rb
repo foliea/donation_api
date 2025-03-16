@@ -3,12 +3,13 @@ require "rails_helper"
 RSpec.describe "GET /api/v1/donations/total", type: :request do
   let(:currency_converter_url) { Rails.application.config.currency_converter_url }
   let(:user) { User.create!(api_token: SecureRandom.hex(20)) }
+  let(:project) { Project.create!(name: "Charity month") }
   let(:headers) { { "Authorization" => user.api_token, "Content-Type" => "application/json" } }
 
   it "returns the total amount of donations converted to given currency" do
-    Donation.create!(user: user, amount: 100, currency: 'EUR', project_id: 1)
-    Donation.create!(user: user, amount: 50, currency: 'GBP', project_id: 1)
-    Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: 1)
+    Donation.create!(user: user, amount: 100, currency: 'EUR', project_id: project.id)
+    Donation.create!(user: user, amount: 50, currency: 'GBP', project_id: project.id)
+    Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: project.id)
 
     stub_request(:get, "#{currency_converter_url}/EUR").to_return(
       status: 200,
@@ -26,7 +27,7 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
     before do
       other_user = User.create!(api_token: SecureRandom.hex(20))
 
-      Donation.create!(user: other_user, amount: 100, currency: 'USD', project_id: 1)
+      Donation.create!(user: other_user, amount: 100, currency: 'USD', project_id: project.id)
     end
 
     it "does not include the other user donations" do
@@ -39,7 +40,7 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
 
   context "when exchange rate service can not be reached" do
     it "returns an error" do
-      Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: 1)
+      Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: project.id)
 
       stub_request(:get, "#{currency_converter_url}/USD").to_return(
         status: 500,
@@ -58,7 +59,7 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
 
   context "when exchange rate of given currency can not be retrieved" do
     it "returns an error" do
-      Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: 1)
+      Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: project.id)
 
       stub_request(:get, "#{currency_converter_url}/USD").to_return(
         status: 200,

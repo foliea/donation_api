@@ -6,8 +6,11 @@ class Api::V1::DonationsController < ApplicationController
   def create
     donation = @current_user.donations.build(donation_params)
 
+    if !Project.exists?(donation.project_id)
+      return render json: { errors: "Project does not exists." }, status: :unprocessable_entity
+    end
     if !donation.save
-      return render json: { errors: donation.errors.full_messages }, status: :unprocessable_entity
+      return render json: { errors: donation.errors.full_messages }, status: :bad_request
     end
 
     render json: { donation: donation }, status: :created
