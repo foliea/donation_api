@@ -9,18 +9,20 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
   it "returns the total amount of donations converted to given currency" do
     Donation.create!(user: user, amount: 100, currency: 'EUR', project_id: project.id)
     Donation.create!(user: user, amount: 50, currency: 'GBP', project_id: project.id)
-    Donation.create!(user: user, amount: 200, currency: 'EUR', project_id: project.id)
+    Donation.create!(user: user, amount: 2000, currency: 'JPY', project_id: project.id)
 
     stub_request(:get, "#{currency_converter_url}/EUR").to_return(
       status: 200,
-      body: { "conversion_rates" => { "EUR" => 1, "GBP" => 0.9 } }.to_json,
+      body: { "conversion_rates" => { "EUR" => 1, "GBP" => 0.9, "JPY" => 148 } }.to_json,
       headers: { 'Content-Type' => 'application/json' }
     )
 
     get "/api/v1/donations/total?currency=EUR", headers: headers
 
     expect(response).to have_http_status(:success)
-    expect(JSON.parse(response.body)).to eq({ "total_amount" => 345.0, "currency" => "EUR" })
+    expect(JSON.parse(response.body)).to eq({
+      "total_amount" => 169.06906906906906, "currency" => "EUR"
+    })
   end
 
   context 'when another user has donations' do

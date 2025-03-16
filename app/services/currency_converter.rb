@@ -37,6 +37,6 @@ class CurrencyConverter
       raise CurrencyConversionError.new("Can't retrieve conversion rate for #{currency}")
     end
 
-    amount * conversion_rate
+    amount / conversion_rate
   end
 end
