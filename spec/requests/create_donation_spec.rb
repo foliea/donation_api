@@ -1,11 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "POST /api/v1/donations", type: :request do
-  let!(:user) { User.create!(api_token: SecureRandom.hex(20)) }
+  let(:user) { User.create!(api_token: SecureRandom.hex(20)) }
+  let(:project) { Project.create!(name: "Charity month") }
   let(:headers) { { "Authorization" => user.api_token, "Content-Type" => "application/json" } }
 
   it "creates a donation" do
-    params = { donation: { amount: 100, currency: "USD", project_id: 1 } }.to_json
+    params = { donation: { amount: 100, currency: "USD", project_id: project.id } }.to_json
 
     post "/api/v1/donations", params: params, headers: headers
 
@@ -13,19 +14,30 @@ RSpec.describe "POST /api/v1/donations", type: :request do
     expect(JSON.parse(response.body)["donation"]).to include(
       "amount" => "100.0",
       "currency" => "USD",
-      "project_id" => 1,
+      "project_id" => project.id,
       "user_id" => user.id
     )
   end
 
   context "with invalid parameters" do
     it "returns an error" do
-      params = { donation: { amount: nil, currency: "USD", project_id: 1 } }.to_json
+      params = { donation: { amount: nil, currency: "USD", project_id: project.id } }.to_json
+
+      post "/api/v1/donations", params: params, headers: headers
+
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["errors"]).to include("Amount can't be blank")
+    end
+  end
+
+  context "when project id does not exists" do
+    it "returns an error" do
+      params = { donation: { amount: 100, currency: "USD", project_id: 42 } }.to_json
 
       post "/api/v1/donations", params: params, headers: headers
 
       expect(response).to have_http_status(:unprocessable_entity)
-      expect(JSON.parse(response.body)["errors"]).to include("Amount can't be blank")
+      expect(JSON.parse(response.body)["errors"]).to include("Project does not exists")
     end
   end
 
