@@ -10,7 +10,7 @@ class Donation < ApplicationRecord
   private
 
   def currency_is_valid_iso4217?
-    if !CurrencyConverter.validate_currency(currency)
+    if !CurrencyConverter.valid?(currency)
       errors.add(:currency, "must be a valid ISO 4217 currency code")
     end
   end

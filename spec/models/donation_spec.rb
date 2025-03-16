@@ -37,6 +37,12 @@ RSpec.describe Donation, type: :model do
       expect(subject.errors[:currency]).to include("must be a valid ISO 4217 currency code")
     end
 
+    it 'is invalid with a non-existing currency' do
+      subject.currency = "ZZZ"
+      expect(subject).not_to be_valid
+      expect(subject.errors[:currency]).to include("must be a valid ISO 4217 currency code")
+    end
+
     it 'is invalid if the amount is less than or equal to zero' do
       subject.amount = 0
       expect(subject).not_to be_valid
