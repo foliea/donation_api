@@ -1,9 +1,9 @@
 class Donation < ApplicationRecord
   belongs_to :user
+  belongs_to :project
 
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :currency, presence: true
-  validates :project_id, presence: true
 
   validate :currency_is_valid_iso4217?
 
