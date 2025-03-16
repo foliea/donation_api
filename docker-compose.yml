@@ -1,10 +1,21 @@
 version: '3.9'
+
 services:
+  db-test:
+    image: postgres:15
+    restart: always
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: donation_api_test
+
   db:
     image: postgres:15
     restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_dev:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -20,7 +31,20 @@ services:
     depends_on:
       - db
     environment:
+      RAILS_ENV: development
       DATABASE_URL: postgres://postgres:password@db/donation_api_development
 
+  test:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && rails db:create db:migrate && bundle exec rspec"
+    volumes:
+      - .:/app
+    depends_on:
+      - db-test
+    environment:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:password@db-test/donation_api_test
+
 volumes:
-  postgres_data:
+  postgres_data_dev:
+  postgres_data_test:
