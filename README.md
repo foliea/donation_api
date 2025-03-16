@@ -11,6 +11,7 @@ This is a RESTful API that allows users to **record donations** to projects and 
 - Runs inside **Docker** for easy setup and testing.
 
 ---
+
 ## 🚀 **Getting Started**
 
 ### **1. Clone the Repository**
@@ -19,16 +20,16 @@ Then:
 cd donation_api
 ```
 
-### **2. Create an environment file
+### **2. Create an Environment File**
 
 Create a `.env` file with:
 ```sh
-EXCHANGE_RATE_API_KEY=<YOUR API KEY>
+EXCHANGE_RATE_API_KEY=<YOUR_API_KEY>
 ```
 
-To get an exchange rate api key, you can follow this [link](https://www.exchangerate-api.com/)
+To get an exchange rate API key, you can follow this [link](https://www.exchangerate-api.com/).
 
-### *3. Setup with Docker*
+### **3. Setup with Docker**
 Ensure you have **Docker** installed, then run:
 ```sh
 docker-compose up --build
@@ -37,19 +38,22 @@ This will:
 - Set up **PostgreSQL** databases (development & test).
 - Run the **Rails server** at `http://localhost:3000`.
 
-### 4. Setup Database**
-Run the following inside the `api` container:
+> **Note:** The `--build` flag is needed only the first time or when dependencies change.
+
+### **4. Setup Database**
+Once the Docker containers are running, run:
 ```sh
 docker-compose exec api rails db:create db:migrate db:seed
 ```
 
-### *5. Running Tests*
+### **5. Running Tests**
 Run the test suite inside the `test` container:
 ```sh
 docker-compose run --rm test
 ```
 
 ---
+
 ## 📌 **API Endpoints**
 
 ### 📌 **Authentication**
@@ -62,12 +66,15 @@ docker-compose run --rm test
   ```
   This will generate and display a new user ID and API token.
 
+---
 
-### 🏗️ Create a new Project
+### 🏗️ Create a New Project
 To create donations, a project identifier is necessary. A rake task can be used to create projects in the database:
 ```sh
-docker-compose exec api rake project:create[<YOUR PROJECT NAME>]
+docker-compose exec api rake project:create[<YOUR_PROJECT_NAME>]
 ```
+
+---
 
 ### **1️⃣ Record a Donation**
 #### **POST** `/api/donations`
@@ -101,6 +108,8 @@ Records a user's donation to a project.
 }
 ```
 
+---
+
 ### **2️⃣ Get Total Donations**
 #### **GET** `/api/donations/total?currency=EUR`
 Returns the total donation amount converted to the specified currency.
@@ -120,6 +129,29 @@ Returns the total donation amount converted to the specified currency.
 }
 ```
 
+#### **Response (400 Bad Request - Invalid Currency)**
+```json
+{
+  "error": "Currency must be ISO 4217."
+}
+```
+
 ---
+
+## 🌍 **Supported Currencies**
+The API supports **161 commonly used world currencies** based on the ISO 4217 standard. Some examples:
+
+| Currency Code | Currency Name       | Country            |
+|--------------|--------------------|-------------------|
+| USD          | United States Dollar | United States     |
+| EUR          | Euro                | European Union    |
+| GBP          | Pound Sterling      | United Kingdom    |
+| JPY          | Japanese Yen        | Japan             |
+| AUD          | Australian Dollar   | Australia         |
+
+For the full list of supported currencies, check [ISO 4217](https://www.iso.org/iso-4217-currency-codes.html).
+
+---
+
 ## 📌 **License**
 MIT License
