@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: donation_api_development
+
+  api:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && rails db:create db:migrate && rails server -b 0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:password@db/donation_api_development
+
+volumes:
+  postgres_data:

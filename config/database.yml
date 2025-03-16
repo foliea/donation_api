@@ -1,0 +1,19 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
+  username: <%= ENV['POSTGRES_USER'] || 'postgres' %>
+  password: <%= ENV['POSTGRES_PASSWORD'] || 'password' %>
+  database: <%= ENV['POSTGRES_DB'] || 'donation_api_development' %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  database: donation_api_test
+
+production:
+  <<: *default
+  database: donation_api_production
