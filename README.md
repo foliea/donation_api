@@ -28,7 +28,7 @@ EXCHANGE_RATE_API_KEY=<YOUR API KEY>
 
 To get an exchange rate api key, you can follow this [link](https://www.exchangerate-api.com/)
 
-### *3. Setup with Docker**
+### *3. Setup with Docker*
 Ensure you have **Docker** installed, then run:
 ```sh
 docker-compose up --build
@@ -43,7 +43,7 @@ Run the following inside the `api` container:
 docker-compose exec api rails db:create db:migrate db:seed
 ```
 
-### *5. Running Tests**
+### *5. Running Tests*
 Run the test suite inside the `test` container:
 ```sh
 docker-compose run --rm test
