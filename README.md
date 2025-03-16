@@ -19,7 +19,16 @@ Then:
 cd donation_api
 ```
 
-### **2. Setup with Docker**
+### **2. Create an environment file
+
+Create a `.env` file with:
+```sh
+EXCHANGE_RATE_API_KEY=<YOUR API KEY>
+```
+
+To get an exchange rate api key, you can follow this [link](https://www.exchangerate-api.com/)
+
+### *3. Setup with Docker**
 Ensure you have **Docker** installed, then run:
 ```sh
 docker-compose up --build
@@ -28,13 +37,13 @@ This will:
 - Set up **PostgreSQL** databases (development & test).
 - Run the **Rails server** at `http://localhost:3000`.
 
-### **3. Setup Database**
+### 4. Setup Database**
 Run the following inside the `api` container:
 ```sh
 docker-compose exec api rails db:create db:migrate db:seed
 ```
 
-### **4. Running Tests**
+### *5. Running Tests**
 Run the test suite inside the `test` container:
 ```sh
 docker-compose run --rm test

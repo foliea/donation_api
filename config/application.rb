@@ -28,5 +28,14 @@ module DonationApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Ensure that the API key environment variable is set
+    exchange_rate_api_key = ENV["EXCHANGE_RATE_API_KEY"]
+
+    if exchange_rate_api_key.blank? && !Rails.env.test?
+      raise "Missing EXCHANGE_API_KEY environment variable. Please set it before starting the application."
+    end
+
+    config.currency_converter_url = "https://v6.exchangerate-api.com/v6/#{exchange_rate_api_key}/latest"
   end
 end
