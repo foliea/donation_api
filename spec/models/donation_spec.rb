@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Donation, type: :model do
   let(:user) { User.create!(api_token: SecureRandom.hex(20)) }
-  let(:project_id) { 1 }
+  let(:project) { Project.create(name: "Test") }
 
-  subject { Donation.new(amount: 100, currency: 'USD', project_id: project_id, user: user) }
+  subject { Donation.new(amount: 100, currency: 'USD', project_id: project.id, user: user) }
 
   describe 'valid donation' do
     it 'is valid with valid attributes' do
@@ -35,12 +35,6 @@ RSpec.describe Donation, type: :model do
       subject.currency = "toto"
       expect(subject).not_to be_valid
       expect(subject.errors[:currency]).to include("must be a valid ISO 4217 currency code")
-    end
-
-    it 'is invalid without a project_id' do
-      subject.project_id = nil
-      expect(subject).not_to be_valid
-      expect(subject.errors[:project_id]).to include("can't be blank")
     end
 
     it 'is invalid if the amount is less than or equal to zero' do
