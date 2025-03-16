@@ -85,6 +85,25 @@ Records a user's donation to a project.
 }
 ```
 
+### **2️⃣ Get Total Donations**
+#### **GET** `/api/donations/total?currency=EUR`
+Returns the total donation amount converted to the specified currency.
+
+#### **Request Headers**
+```json
+{
+  "Authorization": "<API_TOKEN>"
+}
+```
+
+#### **Response (200 OK)**
+```json
+{
+  "total_amount": 150,
+  "currency": "EUR"
+}
+```
+
 ---
 ## 📌 **License**
 MIT License
