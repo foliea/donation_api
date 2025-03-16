@@ -62,6 +62,13 @@ docker-compose run --rm test
   ```
   This will generate and display a new user ID and API token.
 
+
+### 🏗️ Create a new Project
+To create donations, a project identifier is necessary. A rake task can be used to create projects in the database:
+```sh
+docker-compose exec api rake project:create[<YOUR PROJECT NAME>]
+```
+
 ### **1️⃣ Record a Donation**
 #### **POST** `/api/donations`
 Records a user's donation to a project.
