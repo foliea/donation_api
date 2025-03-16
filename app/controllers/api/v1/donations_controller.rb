@@ -16,7 +16,7 @@ class Api::V1::DonationsController < ApplicationController
   def total
     target_currency = params[:currency] || TOTAL_DEFAULT_CURRENCY
 
-    if !CurrencyConverter.validate_currency(target_currency)
+    if !CurrencyConverter.valid?(target_currency)
       return render json: { error: "Currency must be ISO 4217." }, status: :bad_request
     end
 
