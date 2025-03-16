@@ -52,7 +52,6 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
       get "/api/v1/donations/total", headers: headers
 
       expect(response).to have_http_status(:internal_server_error)
-      expect(JSON.parse(response.body)).to eq({})
       expect(Rails.logger).to have_received(:error).with("Error fetching conversion rates for USD")
     end
   end
@@ -71,7 +70,6 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
       get "/api/v1/donations/total", headers: headers
 
       expect(response).to have_http_status(:internal_server_error)
-      expect(JSON.parse(response.body)).to eq({})
       expect(Rails.logger).to have_received(:error).with("Can't retrieve conversion rate for EUR")
     end
   end

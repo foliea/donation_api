@@ -35,7 +35,7 @@ class Api::V1::DonationsController < ApplicationController
     rescue CurrencyConversionError => e
       Rails.logger.error(e.message)
 
-      render json: {}, status: :internal_server_error
+      head :internal_server_error
     end
   end
 
