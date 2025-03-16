@@ -7,7 +7,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resource "donations", only: [ :create ]
+      resource "donations", only: [ :create ] do
+        collection do
+          get "total"
+        end
+      end
     end
   end
 end
