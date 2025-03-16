@@ -153,5 +153,26 @@ For the full list of supported currencies, check [ISO 4217](https://www.iso.org/
 
 ---
 
+## 📌 **Brief Explanation of My Approach**
+
+### **1. Design & Architecture**
+I followed **RESTful principles**, ensuring a clean separation of concerns:
+- **Controllers** handle API requests.
+- **Models** manage data.
+- **Services** (e.g., `CurrencyConverter`) handle business logic.
+
+### **2. Authentication & Donation Handling**
+- Implemented **token-based authentication** (`api_token`) for user-specific access.
+- Users can **record donations** with an amount, currency, and project ID.
+
+### **3. Currency Conversion & Total Calculation**
+- The `CurrencyConverter` service fetches real-time exchange rates and converts donations efficiently.
+- Optimized the process by only passing necessary data.
+
+### **4. Scalability & Reliability**
+- **Modular design** for easy extension.
+- **Error handling** ensures graceful failures.
+- **Dockerized** for seamless setup and testing.
+
 ## 📌 **License**
 MIT License
