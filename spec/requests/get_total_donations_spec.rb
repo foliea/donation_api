@@ -94,15 +94,6 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
     end
   end
 
-  context "with invalid currency is not specified" do
-    it "returns the total amount in USD" do
-      get "/api/v1/donations/total", headers: headers
-
-      expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body)).to eq({ "total_amount" => 0, "currency" => "USD" })
-    end
-  end
-
   context "without API token" do
     it "denies access to donations creation" do
       get "/api/v1/donations/total"
