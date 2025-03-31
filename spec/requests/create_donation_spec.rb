@@ -25,7 +25,7 @@ RSpec.describe "POST /api/v1/donations", type: :request do
 
       post "/api/v1/donations", params: params, headers: headers
 
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:unprocessable_entity)
       expect(JSON.parse(response.body)["errors"]).to include("Amount can't be blank")
     end
   end

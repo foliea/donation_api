@@ -89,7 +89,7 @@ RSpec.describe "GET /api/v1/donations/total", type: :request do
     it "returns an error" do
       get "/api/v1/donations/total?currency=toto", headers: headers
 
-      expect(response).to have_http_status(:bad_request)
+      expect(response).to have_http_status(:unprocessable_entity)
       expect(JSON.parse(response.body)["error"]).to eq("Currency must be ISO 4217.")
     end
   end

@@ -7,7 +7,7 @@ class Api::V1::DonationsController < ApplicationController
     donation = @current_user.donations.build(donation_params)
 
     if !donation.save
-      return render json: { errors: donation.errors.full_messages }, status: :bad_request
+      return render json: { errors: donation.errors.full_messages }, status: :unprocessable_entity
     end
 
     render json: { donation: donation }, status: :created
@@ -17,7 +17,7 @@ class Api::V1::DonationsController < ApplicationController
     target_currency = params[:currency] || TOTAL_DEFAULT_CURRENCY
 
     if !CurrencyConverter.valid?(target_currency)
-      return render json: { error: "Currency must be ISO 4217." }, status: :bad_request
+      return render json: { error: "Currency must be ISO 4217." }, status: :unprocessable_entity
     end
 
     user_donations = @current_user.donations
